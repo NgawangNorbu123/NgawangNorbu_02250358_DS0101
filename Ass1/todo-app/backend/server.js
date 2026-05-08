@@ -9,6 +9,26 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Create tasks table automatically
+const createTable = async () => {
+  try {
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS tasks (
+        id SERIAL PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        completed BOOLEAN DEFAULT false,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
+
+    console.log("Tasks table ready");
+  } catch (error) {
+    console.error("Error creating tasks table:", error.message);
+  }
+};
+
+createTable();
+
 app.get("/", (req, res) => {
   res.send("Todo Backend API is running");
 });
