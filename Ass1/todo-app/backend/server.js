@@ -6,7 +6,19 @@ const pool = require("./db");
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://fe-todo-02250358.onrender.com"
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type"]
+  })
+);
+
+app.options("*", cors());
+
 app.use(express.json());
 
 app.get("/", (req, res) => {
@@ -16,10 +28,15 @@ app.get("/", (req, res) => {
 // Get all tasks
 app.get("/tasks", async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM tasks ORDER BY id ASC");
+    const result = await pool.query(
+      "SELECT * FROM tasks ORDER BY id ASC"
+    );
+
     res.json(result.rows);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({
+      error: error.message
+    });
   }
 });
 
@@ -27,13 +44,17 @@ app.get("/tasks", async (req, res) => {
 app.post("/tasks", async (req, res) => {
   try {
     const { title } = req.body;
+
     const result = await pool.query(
       "INSERT INTO tasks (title) VALUES ($1) RETURNING *",
       [title]
     );
+
     res.json(result.rows[0]);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({
+      error: error.message
+    });
   }
 });
 
@@ -50,7 +71,9 @@ app.put("/tasks/:id", async (req, res) => {
 
     res.json(result.rows[0]);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({
+      error: error.message
+    });
   }
 });
 
@@ -58,10 +81,19 @@ app.put("/tasks/:id", async (req, res) => {
 app.delete("/tasks/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    await pool.query("DELETE FROM tasks WHERE id=$1", [id]);
-    res.json({ message: "Task deleted successfully" });
+
+    await pool.query(
+      "DELETE FROM tasks WHERE id=$1",
+      [id]
+    );
+
+    res.json({
+      message: "Task deleted successfully"
+    });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({
+      error: error.message
+    });
   }
 });
 
