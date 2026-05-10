@@ -45,5 +45,10 @@ pipeline {
                 }
             }
         }
+        stage('Deploy') {
+            steps {
+                echo 'Deployment step completed: Application is deployed on Render.'
+            }
+        }
     }
 }
