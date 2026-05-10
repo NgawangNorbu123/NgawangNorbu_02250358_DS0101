@@ -29,4 +29,4 @@ jobs:
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/fe-todo:02250358
       
       - name: Trigger Render Deployment
-         run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
