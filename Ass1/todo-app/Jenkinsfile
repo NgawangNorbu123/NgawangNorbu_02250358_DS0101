@@ -30,6 +30,14 @@ pipeline {
             }
         }
 
+        stage('Test Frontend') {
+            steps {
+                dir('frontend') {
+                    bat 'npm test -- --watchAll=false'
+                }
+            }
+        }
+
         stage('Install Backend Dependencies') {
             steps {
                 dir('backend') {
